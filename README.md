@@ -47,7 +47,7 @@ A modern and interactive circular countdown timer built with **SwiftUI** featuri
 
 ## 🔊 System Sound Note
 
-Currently uses `SystemSoundID(1005)` for completion (mail notification). You can change this to any available [System Sound ID](https://iphonedev.wiki/index.php/AudioServices).
+Currently uses `SystemSoundID(1005)` for completion (mail notification). You can change this to any available System Sound ID.
 
 ---
 

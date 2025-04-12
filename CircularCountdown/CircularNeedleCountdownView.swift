@@ -13,12 +13,14 @@ struct CircularNeedleCountdownView: View {
     @State private var timer: Timer? = nil
     @State private var isRunning: Bool = false
 
+    let durationOptions = Array(5...60)
+
     var progress: Double {
         Double(timeRemaining) / Double(totalTime)
     }
 
     var angle: Double {
-        -progress * 360 // anticlockwise
+        -progress * 360
     }
 
     var gradient: AngularGradient {
@@ -33,12 +35,10 @@ struct CircularNeedleCountdownView: View {
     var body: some View {
         VStack(spacing: 30) {
             ZStack {
-                // Base Circle
                 Circle()
                     .stroke(Color.gray.opacity(0.2), lineWidth: 12)
                     .frame(width: 200, height: 200)
 
-                // Progress Arc
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(gradient, style: StrokeStyle(lineWidth: 12, lineCap: .round))
@@ -46,7 +46,6 @@ struct CircularNeedleCountdownView: View {
                     .frame(width: 200, height: 200)
                     .animation(.linear(duration: 1), value: timeRemaining)
 
-                // Needle
                 Rectangle()
                     .fill(gradient)
                     .frame(width: 3, height: 90)
@@ -54,27 +53,53 @@ struct CircularNeedleCountdownView: View {
                     .rotationEffect(.degrees(-angle))
                     .animation(.linear(duration: 1), value: timeRemaining)
 
-                // Center Circle
                 Circle()
                     .fill(Color.teal)
                     .frame(width: 12, height: 12)
 
-                // Time Display
                 Text("\(timeRemaining)s")
                     .font(.title)
                     .bold()
             }
 
-            // Play/Pause Button
-            Button(action: {
-                isRunning ? pauseTimer() : startTimer()
-            }) {
-                Image(systemName: isRunning ? "pause.circle.fill" : "play.circle.fill")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .foregroundStyle(.teal)
+            // Picker to select duration
+            Picker("Duration", selection: Binding(
+                get: { totalTime },
+                set: {
+                    totalTime = $0
+                    timeRemaining = $0
+                }
+            )) {
+                ForEach(durationOptions, id: \.self) { sec in
+                    Text("\(sec) sec").tag(sec)
+                }
             }
-            .padding(.top, 10)
+            .pickerStyle(.wheel)
+            .frame(height: 100)
+            .disabled(isRunning)
+
+            // Controls
+            HStack(spacing: 40) {
+                // Play/Pause
+                Button(action: {
+                    isRunning ? pauseTimer() : startTimer()
+                }) {
+                    Image(systemName: isRunning ? "pause.circle.fill" : "play.circle.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundStyle(.teal)
+                }
+
+                // Reset
+                Button(action: {
+                    resetTimer()
+                }) {
+                    Image(systemName: "arrow.counterclockwise.circle.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundStyle(.green)
+                }
+            }
         }
         .padding()
     }
@@ -99,6 +124,11 @@ struct CircularNeedleCountdownView: View {
         timer?.invalidate()
         timer = nil
         isRunning = false
+    }
+
+    func resetTimer() {
+        pauseTimer()
+        timeRemaining = totalTime
     }
 }
 

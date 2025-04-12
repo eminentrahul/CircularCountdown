@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AudioToolbox
 
 struct CircularNeedleCountdownView: View {
     @State private var timeRemaining: Int = 10
@@ -115,6 +116,7 @@ struct CircularNeedleCountdownView: View {
             if timeRemaining > 0 {
                 timeRemaining -= 1
             } else {
+                playCompletionSound()
                 pauseTimer()
             }
         }
@@ -130,6 +132,11 @@ struct CircularNeedleCountdownView: View {
         pauseTimer()
         timeRemaining = totalTime
     }
+    
+    func playCompletionSound() {
+        AudioServicesPlaySystemSound(SystemSoundID(1005)) // iPhone "new mail" sound
+    }
+
 }
 
 #Preview {

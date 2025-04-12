@@ -23,7 +23,7 @@ A modern and interactive circular countdown timer built with **SwiftUI** featuri
 
 ## 📷 Preview
 
-| Running Timer | Time’s Up! | Confetti Celebration |
+| Circular Timer | Running Timer! | Confetti Celebration |
 |:-------------:|:----------:|:--------------------:|
 | ![Timer](preview1.png) | ![Done](preview2.png) | ![Confetti](preview3.png) |
 

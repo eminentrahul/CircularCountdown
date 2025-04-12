@@ -13,6 +13,7 @@ struct CircularNeedleCountdownView: View {
     @State private var totalTime: Int = 10
     @State private var timer: Timer? = nil
     @State private var isRunning: Bool = false
+    @State private var showConfetti: Bool = false
 
     let durationOptions = Array(5...60)
 
@@ -35,6 +36,19 @@ struct CircularNeedleCountdownView: View {
 
     var body: some View {
         VStack(spacing: 30) {
+            
+            VStack {
+                if showConfetti {
+                    Text("🎉 Time's Up! 🎉")
+                        .font(.title2)
+                        .foregroundColor(.green)
+                        .bold()
+                        .transition(.scale)
+                        .padding(.top, 10)
+                }
+            }
+            .padding(.bottom, 30)
+            
             ZStack {
                 Circle()
                     .stroke(Color.gray.opacity(0.2), lineWidth: 12)
@@ -103,6 +117,14 @@ struct CircularNeedleCountdownView: View {
             }
         }
         .padding()
+        .overlay(
+            ZStack {
+                if showConfetti {
+                    SpaghettiConfettiView( animate: showConfetti)
+                }
+            }
+        )
+
     }
 
     func startTimer() {
@@ -118,6 +140,7 @@ struct CircularNeedleCountdownView: View {
             } else {
                 playCompletionSound()
                 pauseTimer()
+                showConfetti = true
             }
         }
     }
@@ -131,6 +154,7 @@ struct CircularNeedleCountdownView: View {
     func resetTimer() {
         pauseTimer()
         timeRemaining = totalTime
+        showConfetti = false
     }
     
     func playCompletionSound() {

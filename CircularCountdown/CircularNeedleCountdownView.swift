@@ -51,7 +51,7 @@ struct CircularNeedleCountdownView: View {
                     .fill(gradient)
                     .frame(width: 3, height: 90)
                     .offset(y: -45)
-                    .rotationEffect(.degrees(angle))
+                    .rotationEffect(.degrees(-angle))
                     .animation(.linear(duration: 1), value: timeRemaining)
 
                 // Center Circle
@@ -64,19 +64,28 @@ struct CircularNeedleCountdownView: View {
                     .font(.title)
                     .bold()
             }
+
+            // Play/Pause Button
+            Button(action: {
+                isRunning ? pauseTimer() : startTimer()
+            }) {
+                Image(systemName: isRunning ? "pause.circle.fill" : "play.circle.fill")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .foregroundStyle(.teal)
+            }
+            .padding(.top, 10)
         }
         .padding()
-        .onAppear {
-            startTimer()
-        }
-        .onDisappear {
-            pauseTimer()
-        }
     }
 
     func startTimer() {
-        pauseTimer()
+        if timeRemaining <= 0 {
+            timeRemaining = totalTime
+        }
+
         isRunning = true
+        timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if timeRemaining > 0 {
                 timeRemaining -= 1

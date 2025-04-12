@@ -11,7 +11,7 @@ import SwiftUI
 struct CircularCountdownApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CircularNeedleCountdownView()
         }
     }
 }

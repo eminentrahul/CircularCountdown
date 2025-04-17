@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SpaghettiConfettiView: View {
-    var count: Int = 40
+    var count: Int = 100
     var colors: [Color] = [Color.teal, Color.green, Color.cyan]
     var animate: Bool
 
